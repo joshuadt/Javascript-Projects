@@ -1,0 +1,11 @@
+function palindrome(str) {
+
+let filterReg = /[^a-z0-9]/gi;
+let mutStr = str.toLowerCase().replace(filterReg, '');
+mutStr = Array.from(mutStr);
+  if(mutStr.join("") === mutStr.reverse().join("")){
+    return true;
+  }
+  return false;
+}
+palindrome("1 eye for of 1 eye.");
