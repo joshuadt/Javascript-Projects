@@ -1,0 +1,26 @@
+function rot13(str) {
+const alphabet = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+let answer = [];
+let transformed = Array.from(str);
+let regex = /[A-Z]/gi;
+console.log(transformed);
+for(let i = 0; i < transformed.length; i++){
+if(regex.test(transformed[i]) === true){
+transformed[i].replace(regex,charFinder(transformed[i]));
+}
+else{
+  answer.push(transformed[i]);
+}
+}
+function charFinder(char){
+  for(let j = 0; j < alphabet.length; j++){
+    if (char == alphabet[j]){
+      answer.push(alphabet.slice(j-13,j-12));
+    }
+  }
+}
+console.log(answer.join(''));
+}
+
+
+rot13("SERR CVMMN!")
