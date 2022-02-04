@@ -1,0 +1,36 @@
+function checkCashRegister(price, cash, cid) {
+  const currency = {
+    "ONE HUNDRED": 100.00,
+    "TWENTY": 20.00,
+    "TEN": 10.00,
+    "FIVE": 5.00,
+    "ONE": 1.00,
+    "QUARTER": .25,
+    "DIME": .10,
+    "NICKEL": .05,
+    "PENNY": .01
+  }
+  console.log(currency.PENNY);
+  let difference = cash - price;
+  let change = [];
+  cid = cid.reverse();
+  for(var denom in cid){
+   let key = cid[denom][0];
+   console.log(key);
+    while(difference >= currency[key]){
+      
+      if(change.indexOf(currency[key]) === -1){
+        let counter = 1;
+        difference -= currency[key];
+        change.push([key, counter]);
+      }
+      else{
+        change[denom][1] += 1;
+      }
+    }
+  }
+  console.log(difference);
+  console.log(change);
+}
+
+checkCashRegister(19.5, 20, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]);
