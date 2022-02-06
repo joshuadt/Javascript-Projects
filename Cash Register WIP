@@ -16,10 +16,10 @@ function checkCashRegister(price, cash, cid)
   {
     let counter = 0;
       while(val <= diff)
-      {
+      {console.log(diff);
         counter += 1;
         diff -= val;
-        //console.log(diff);
+        console.log(diff);
       }
    return {"counter": counter, "difference": diff};
   } 
@@ -27,31 +27,41 @@ function checkCashRegister(price, cash, cid)
   let change = [];
   let ogAmnt = 0;
   let aftAmnt = 0;
-  cid = cid.reverse();
-    for(var denom in cid)
+  let cid2 = cid.reverse();
+    for(var denom in cid2)
     {
-       let key = cid[denom][0];
+       let key = cid2[denom][0];
       //console.log(key);
           if(difference >= currency[key])
           {
       const database = changeRec(currency[key],difference);
       difference = database.difference;
       //console.log(database.counter);
+     
       change.push([key, (currency[key]*database.counter)]);
           }
     }
-  for(let i=0; i < cid.length; i++){
-    ogAmnt += cid[i][1];
+  for(let i=0; i < cid2.length; i++){
+    ogAmnt += cid2[i][1];
   }
   for(let j=0; j < change.length; j++){
     aftAmnt +=change[j][1];
   }
- return 
+//  if(ogAmnt < aftAmnt){
+//    console.log({status: "INSUFFICIENT FUNDS", change: []})
+//  }
+//  else if(ogAmnt == aftAmnt){
+//    console.log({status: "CLOSED", change: cid.reverse()});
+//  }
+//  else{
+//    console.log({status: "OPEN", change: change});
+//  }
+        
+  return (ogAmnt < aftAmnt) ? {status: "INSUFFICIENT FUNDS", change: []}
+        : (ogAmnt == aftAmnt) ? {status: "CLOSED", change: cid.reverse()}
+        : {status: "OPEN", change: [change]};
+      
 }
 
-
-
-
-checkCashRegister(19.5, 20, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]);
 
 checkCashRegister(19.5, 20, [["PENNY", 0.5], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]])
