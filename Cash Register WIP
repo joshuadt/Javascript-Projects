@@ -10,27 +10,34 @@ function checkCashRegister(price, cash, cid) {
     "NICKEL": .05,
     "PENNY": .01
   }
-  console.log(currency.PENNY);
+  function changeRec(val, diff){
+let counter = 0;
+  while(val <= diff){
+    counter += 1;
+    diff -= val;
+    console.log(diff);
+  }
+  return {"counter": counter, "difference": diff};
+}
   let difference = cash - price;
   let change = [];
   cid = cid.reverse();
   for(var denom in cid){
    let key = cid[denom][0];
    console.log(key);
-    while(difference >= currency[key]){
-      
-      if(change.indexOf(currency[key]) === -1){
-        let counter = 1;
-        difference -= currency[key];
-        change.push([key, counter]);
-      }
-      else{
-        change[denom][1] += 1;
-      }
+    if(difference >= currency[key]){
+    
+      const database = changeRec(currency[key],difference);
+      difference = database.difference;
+      console.log(database.counter);
+      change.push([key, (currency[key]*database.counter)]);
+
     }
+  
+
   }
-  console.log(difference);
+
   console.log(change);
+
 }
 
-checkCashRegister(19.5, 20, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]);
