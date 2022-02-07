@@ -12,56 +12,44 @@ function checkCashRegister(price, cash, cid)
     "NICKEL": .05,
     "PENNY": .01
   }
-  function changeRec(val, diff)
+  function changeRec(val, diff, reg)
   {
     let counter = 0;
-      while(val <= diff)
-      {console.log(diff);
+      while(val <= diff && reg >= val){
         counter += 1;
-        diff -= val;
-        console.log(diff);
+        diff = diff.toFixed(2) - val.toFixed(2);
+        reg = reg.toFixed(2) - val.toFixed(2);
       }
-   return {"counter": counter, "difference": diff};
+   return {"counter": counter, "difference": diff, "register": [val, reg]};
   } 
   let difference = cash - price;
   let change = [];
+  
   let ogAmnt = 0;
   let aftAmnt = 0;
   let cid2 = cid.reverse();
     for(var denom in cid2)
     {
        let key = cid2[denom][0];
-      //console.log(key);
           if(difference >= currency[key])
-          {
-      const database = changeRec(currency[key],difference);
+          {  
+      const database = changeRec(currency[key],difference, cid2[denom][1]);
       difference = database.difference;
-      //console.log(database.counter);
-     
       change.push([key, (currency[key]*database.counter)]);
           }
     }
+
   for(let i=0; i < cid2.length; i++){
     ogAmnt += cid2[i][1];
   }
   for(let j=0; j < change.length; j++){
     aftAmnt +=change[j][1];
   }
-//  if(ogAmnt < aftAmnt){
-//    console.log({status: "INSUFFICIENT FUNDS", change: []})
-//  }
-//  else if(ogAmnt == aftAmnt){
-//    console.log({status: "CLOSED", change: cid.reverse()});
-//  }
-//  else{
-//    console.log({status: "OPEN", change: change});
-//  }
-        
-  return (ogAmnt < aftAmnt) ? {status: "INSUFFICIENT FUNDS", change: []}
-        : (ogAmnt == aftAmnt) ? {status: "CLOSED", change: cid.reverse()}
-        : {status: "OPEN", change: [change]};
+      
+  return (difference > 0) ? {status: "INSUFFICIENT_FUNDS", change: []}
+        : (ogAmnt == aftAmnt && difference == 0) ? {status: "CLOSED", change: cid.reverse()}
+        : {status: "OPEN", change:change};
       
 }
-
 
 checkCashRegister(19.5, 20, [["PENNY", 0.5], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]])
